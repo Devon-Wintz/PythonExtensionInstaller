@@ -1,12 +1,26 @@
+
 @echo off
 color 0E
 title Python3 Extensions Installer
 echo.
 
-GOTO menu
+GOTO greetings
+
+rem=================Check Internet Connectivity====================
+:connStatus
+Ping www.google.nl -n 1 -w 1000
+cls
+if errorlevel 1 (set internet=Hey %USERNAME% it seems like you are not connected to internet. Please ensure that you are connected to the internet.) else GOTO mainMenu
+echo Internet Connection Error
+echo.
+echo %internet%
+pause>nul
+exit
+
+
 
 rem =======================Menu Function=========================
-:startfunc
+:mainMenu
 cls
 echo.
 echo ===================MAIN MENU===========================
@@ -27,7 +41,7 @@ IF '%id%' == '4' GOTO 4
 IF '%id%' == '5' GOTO 5
 IF '%id%' == '0' GOTO 0
 
-GOTO startfunc
+GOTO mainMenu
 
 rem =================Python Installation Function=================
 :1
@@ -40,7 +54,7 @@ start "" /w /b "python-3.7.0b3-amd64.exe"
 pause >nul
 cls
 echo.
-GOTO startfunc
+GOTO mainMenu
 exit
 
 
@@ -51,11 +65,10 @@ echo Installing Pip 10
 echo ..................
 echo.
 start "" /w /b "get-pip.py"
-::echo Please wait while pip installs and checks for updates...
 pause >nul
 cls
 echo.
-GOTO startfunc
+GOTO mainMenu
 exit
 
 rem ====================Modules Installation======================
@@ -64,16 +77,17 @@ cls
 echo Modules Installation
 echo ....................	
 echo.
+
 ::echo Enter a filename to start install using pip
 ::set  INPUT=
 ::set  /P INPUT=Type input:%=%
 ::pip install %INPUT%
 
 pip install  numpy-1.14.2+mkl-cp37-cp37m-win_amd64.whl python_dateutil-2.7.3-py2.py3-none-any.whl pytz-2018.4-py2.py3-none-any.whl setuptools-39.2.0-py2.py3-none-any.whl pandas-0.23.0-cp37-cp37m-win_amd64.whl cycler-0.10.0-py2.py3-none-any.whl kiwisolver-1.0.1-cp37-cp37m-win_amd64.whl pyparsing-2.2.0-py2.py3-none-any.whl matplotlib-2.2.2-cp37-cp37m-win_amd64.whl
-pause 
+pause>nul 
 cls
 echo.
-GOTO startfunc
+GOTO mainMenu
 exit
 
 rem
@@ -85,7 +99,7 @@ pip freeze
 pause >nul
 cls
 echo.
-GOTO startfunc
+GOTO mainMenu
 exit
 
 rem ====================Pip Uninstall=================
@@ -97,13 +111,13 @@ echo.
 echo Enter a filename to UNINSTALL using pip
 set  INPUT=
 set /P INPUT=Type input:%=%
-::cd \
-::cd \python%python_ver%\Scripts\
+cd  \
+cd  \python%python_ver%\Scripts\
 echo Are you sure you want to uninstall "%INPUT%" ? Y/N
 set /P opt=:
-IF '%opt%' == 'N' GOTO startfunc
-IF '%opt%' == 'n' GOTO startfunc
-::pip uninstall %INPUT%
+IF '%opt%' == 'N' GOTO mainMenu
+IF '%opt%' == 'n' GOTO mainMenu
+   pip uninstall %INPUT%
 exit
  
 pause
@@ -114,13 +128,14 @@ rem =======================Exit Function==========================
 cls
 echo Are you sure you want to exit? Y/N
 set /P opt=:
-IF '%opt%' == 'N' GOTO startfunc
-IF '%opt%' == 'n' GOTO startfunc
+IF '%opt%' == 'N' GOTO mainMenu
+IF '%opt%' == 'n' GOTO mainMenu
 exit
 
 
+
 ::=========================================Greetings Function====================================
-:menu
+:greetings
 echo                           * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **
 echo                           * Hi %USERNAME%                                                   *
 echo                           * Welcome to Python Extensions Installer, a quick and easy   * 
@@ -134,5 +149,6 @@ echo.
 echo Please press 'ENTER' to continue
 pause >nul	
 echo.
-GOTO startfunc
+GOTO connStatus
 exit
+
